@@ -1,11 +1,33 @@
+<!DOCTYPE html>
 <html>
-
 <head>
+    <title>Music Sync Client</title>
+    <!-- Подключаем SignalR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <!-- Подключаем наш класс -->
+    <script src="client.js"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-
-            const client = new MusicSyncClient('ROOM_ID');
-            client.connect();
+            // Создаем клиент и сохраняем его в глобальной области видимости
+            window.client = new MusicSyncClient(1);
+            //window.client = new MusicSyncClient('ROOM_ID');
+            window.client.connect();
+            
+            // Добавим обработчики для аудио плеера, чтобы отправлять события на сервер
+            const audio = document.getElementById('audioPlayer');
+            
+            audio.addEventListener('play', () => {
+                window.client.pauseTrack(); // или playTrack с текущей позицией
+            });
+            
+            audio.addEventListener('pause', () => {
+                window.client.pauseTrack();
+            });
+            
+            audio.addEventListener('seeked', () => {
+                window.client.seekTrack(audio.currentTime);
+            });
         });
     </script>
 </head>
@@ -21,7 +43,8 @@
         <h3>Playlist:</h3>
         <ul id="trackList"></ul>
 
-        <button onclick="client.syncPosition()">Sync</button>
+        <!-- Используем переименованный метод -->
+        <button onclick="window.client.requestSync()">Sync</button>
     </div>
 </body>
 
