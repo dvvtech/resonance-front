@@ -1,5 +1,28 @@
 <html>
-    <body>
-        hello
-    </body>
+
+<head>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const client = new MusicSyncClient('ROOM_ID');
+            client.connect();
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <h2>Room: <span id="roomName"></span></h2>
+        <p>Users connected: <span id="userCount">0</span></p>
+        <p>Now playing: <span id="currentTrack"></span></p>
+
+        <audio id="audioPlayer" controls></audio>
+
+        <h3>Playlist:</h3>
+        <ul id="trackList"></ul>
+
+        <button onclick="client.syncPosition()">Sync</button>
+    </div>
+</body>
+
 </html>
