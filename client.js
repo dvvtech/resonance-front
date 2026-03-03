@@ -42,7 +42,7 @@ class MusicSyncClient {
         
         this.connection.on("SyncPosition", (data) => {
             console.log("Sync position:", data);
-            this.syncPosition(data);
+            this.handleSyncPosition(data);
         });
         
         this.connection.on("Error", (error) => {
@@ -73,7 +73,8 @@ class MusicSyncClient {
         await this.connection.invoke("SeekTrack", this.roomId, position);
     }
     
-    async syncPosition() {
+    // Переименовал метод для отправки запроса на сервер
+    async requestSync() {
         await this.connection.invoke("SyncPosition", this.roomId);
     }
     
@@ -112,7 +113,8 @@ class MusicSyncClient {
         document.getElementById('audioPlayer').currentTime = position;
     }
     
-    syncPosition(data) {
+    // Переименовал метод-обработчик для синхронизации
+    handleSyncPosition(data) {
         const audio = document.getElementById('audioPlayer');
         if (data.isPlaying && audio.paused) {
             audio.currentTime = data.position;
@@ -123,4 +125,9 @@ class MusicSyncClient {
             audio.currentTime = data.position;
         }
     }
+}
+
+// Экспортируем класс (для использования в модулях)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MusicSyncClient;
 }
