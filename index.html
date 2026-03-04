@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Music Sync Client</title>
     <!-- Подключаем SignalR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
     <!-- Подключаем наш класс -->
     <script src="client.js"></script>
-    
+
     <script>
+
         document.addEventListener("DOMContentLoaded", () => {
+            // Получаем roomId из URL или используем значение по умолчанию
+            //const urlParams = new URLSearchParams(window.location.search);
+            //const roomId = urlParams.get('roomId') || '1';
+            const roomId = 1;
+
             // Создаем клиент и сохраняем его в глобальной области видимости
-            window.client = new MusicSyncClient(1);
-            //window.client = new MusicSyncClient('ROOM_ID');
-            window.client.connect();
-            
-            // Добавим обработчики для аудио плеера, чтобы отправлять события на сервер
-            const audio = document.getElementById('audioPlayer');
-            
-            audio.addEventListener('play', () => {
-                window.client.pauseTrack(); // или playTrack с текущей позицией
-            });
-            
-            audio.addEventListener('pause', () => {
-                window.client.pauseTrack();
-            });
-            
-            audio.addEventListener('seeked', () => {
-                window.client.seekTrack(audio.currentTime);
-            });
+            window.client = new MusicSyncClient(parseInt(roomId));
+
+            // НЕ подключаемся автоматически, ждем нажатия кнопки
+            // window.client.connect(); - убираем это           
         });
     </script>
 </head>
@@ -38,7 +31,17 @@
         <p>Users connected: <span id="userCount">0</span></p>
         <p>Now playing: <span id="currentTrack"></span></p>
 
-        <audio id="audioPlayer" controls></audio>
+        <!-- Блок для неготовых пользователей -->
+        <div id="readyBlock">
+            <button id="readyButton" onclick="window.client.onUserReady()">🎧 Приготовиться слушать</button>
+            <p id="readyMessage" style="color: #666;">Нажмите кнопку, чтобы присоединиться к прослушиванию</p>
+        </div>
+
+        <!-- Основной плеер (изначально скрыт) -->
+        <div id="playerBlock" style="display: none;">
+            <audio id="audioPlayer" controls></audio>
+            <p id="listenerStatus"></p>
+        </div>
 
         <h3>Playlist:</h3>
         <ul id="trackList"></ul>
