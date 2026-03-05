@@ -21,13 +21,15 @@
 
             // НЕ подключаемся автоматически, ждем нажатия кнопки
             // window.client.connect(); - убираем это    
-            
+
             const audio = document.getElementById('audioPlayer');
-            
-            /*audio.addEventListener('play', () => {
-                window.client.pauseTrack(); // или playTrack с текущей позицией
-            });*/
-            
+
+            audio.addEventListener('play', () => {
+                if (!window.client.flag) {
+                    window.client.playTrack(1, 0); // или playTrack с текущей позицией
+                }
+            });
+
             audio.addEventListener('pause', () => {
                 window.client.pauseTrack();
             });

@@ -1,6 +1,7 @@
 class MusicSyncClient {
     constructor(roomId) {
         this.roomId = roomId;
+        this.flag = false;
         this.isUserReady = false; // Флаг готовности пользователя
         this.pendingTrack = null; // Сохраняем трек, если пришел до готовности
         this.connection = new signalR.HubConnectionBuilder()            
@@ -193,6 +194,7 @@ class MusicSyncClient {
     }
 
     playTrack1(url, position) {
+        this.flag = true;
         const audio = document.getElementById('audioPlayer');
         audio.src = url;
         audio.currentTime = position;
@@ -203,6 +205,7 @@ class MusicSyncClient {
             playPromise
                 .then(() => {
                     console.log("Playback started successfully");
+                    this.flag = false;
                 })
                 .catch(error => {
                     console.log("Playback error:", error);
