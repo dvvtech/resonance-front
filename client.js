@@ -113,7 +113,7 @@ class MusicSyncClient {
         this.connection.on("TrackPaused", (position) => {
             console.log("Track paused at:", position);
             if (!this.isUserReady) return;
-            this.pauseTrack();
+            this.pauseTrack1();
         });
 
         this.connection.on("TrackSeeked", (position) => {
@@ -149,7 +149,8 @@ class MusicSyncClient {
         await this.connection.invoke("PlayTrack", this.roomId, trackId, position);
         this.isLocalAction = false;
     }
-    
+
+    //вызывается из index.html
     async pauseTrack() {
         this.isLocalAction = true;
         await this.connection.invoke("PauseTrack", this.roomId);
@@ -216,7 +217,8 @@ class MusicSyncClient {
         }
     }
 
-    pauseTrack() {
+    
+    pauseTrack1() {
         document.getElementById('audioPlayer').pause();
     }
 

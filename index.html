@@ -20,7 +20,21 @@
             window.client = new MusicSyncClient(parseInt(roomId));
 
             // НЕ подключаемся автоматически, ждем нажатия кнопки
-            // window.client.connect(); - убираем это           
+            // window.client.connect(); - убираем это    
+            
+            const audio = document.getElementById('audioPlayer');
+            
+            /*audio.addEventListener('play', () => {
+                window.client.pauseTrack(); // или playTrack с текущей позицией
+            });*/
+            
+            audio.addEventListener('pause', () => {
+                window.client.pauseTrack();
+            });
+
+            /*audio.addEventListener('seeked', () => {
+                window.client.seekTrack(audio.currentTime);
+            });*/
         });
     </script>
 </head>
